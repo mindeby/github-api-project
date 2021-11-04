@@ -1,5 +1,5 @@
 import './App.css';
-import BestRepos from './sections/BestRepositories';
+import BestRepos from './sections/bestRepositories';
 
 function App() {
   return (

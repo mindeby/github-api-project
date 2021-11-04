@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
-import Icon from '../components/icon'
+import ReposList from '../components/reposList';
+import SavedList from '../components/savedList';
 
 const BestRepos = () => {
     const [repos, setRepos] = useState(null)
     const [saved, setSaved] = useState(JSON.parse(localStorage.getItem('saved')) || [])
+    const [openTab, setOpenTab] = useState('best')
 
     //data fetching
     useEffect(() => {
@@ -32,33 +34,21 @@ const BestRepos = () => {
         localStorage.setItem('saved', JSON.stringify(saved));
     }, [saved]);
 
-    const handleFavourite = (ev, repo) => {
-        if (saved.filter(item => item.id === repo.id).length > 0) {
-            setSaved(saved.filter(item => item.id !== repo.id))
-            ev.target.closest('svg').classList.remove('active')
-        } else {
-            setSaved([...saved, repo])
-            ev.target.closest('svg').classList.add('active')
-        }
+    const handleSelection = (ev) => {
+        setOpenTab(ev.target.getAttribute('value'))
     }
 
       return (
        <Container>
-            <ul>
-                {repos && repos.map((repo) => (
-                    <li key={repo.id}>
-                        <a href={repo.url} target="_blank" rel="noreferrer">
-                            <p>{repo.name}</p>
-                            <p>{repo.description}</p>
-                            <p>{repo.language}</p>
-                            <p>{repo.stargazers_count}</p>
-                        </a>
-                        <HeartWrapper onClick={(ev) => handleFavourite(ev, repo)}>
-                            <Icon type='heart' className={saved.filter(item => item.id === repo.id).length > 0 ?  'active' : undefined}/>
-                        </HeartWrapper>
-                    </li>
-                ))}
-           </ul>
+           <Tabs onClick={(ev) => handleSelection(ev)}>
+               <Tab value={'best'} open={openTab === 'best'}>Best of the Week</Tab>
+               <Tab value={'saved'} open={openTab === 'saved'}>My Favourites</Tab>
+           </Tabs>
+           {openTab === 'best' ? 
+                <ReposList list={repos} saved={saved} setSaved={setSaved}/>
+                :
+                <SavedList list={saved} saved={saved} setSaved={setSaved}/>
+           }
        </Container>
         );
 }
@@ -66,21 +56,42 @@ const BestRepos = () => {
 export default BestRepos
 
 const Container = styled.div`
+    padding: 16px 16px 0;
     li {
-        position: relative;
+        list-style-type: none;
+    }
+
+    ul {
+        margin-top: 0;
+    }
+
+    a {
+        color: inherit;
+    }
+    max-width: 1440px;
+    margin: auto;
+`
+
+const Tabs = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media (min-width: 768px) {
+        cursor: pointer;
     }
 `
 
-
-const HeartWrapper = styled.div`
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    cursor: pointer;
-
-    svg.active {
-        path {
-            fill: red;
-        }
-    }
+const Tab = styled.div`
+    text-align: center;
+    text-transform: uppercase;
+    flex-basis: 50%;
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+    color: ${props => (props.open ? 'white' : 'black')};
+    border: ${props => (props.open ? 'solid 1px #a6abb0' : 'solid 1px transparent')};
+    border-radius: ${props => (props.open ? '6px 6px 0 0' : '0')};
+    border-bottom: ${props => (props.open ? 'none' : 'solid 1px #a6abb0')};
+    background: ${props => (props.open ? 'linear-gradient(to bottom, #371765, #6e147c);' : 'solid 1px #a6abb0')};
 `
