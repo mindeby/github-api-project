@@ -17,7 +17,7 @@ const ReposList = ({list, saved, setSaved}) => {
       return (
             <List>
                 {list && list.map((repo) => (
-                    <ListItem listItem={repo} handleFavourite={handleFavourite} saved={saved}/>
+                    <ListItem key={repo.id} listItem={repo} handleFavourite={handleFavourite} saved={saved}/>
                 ))}
            </List>
         );

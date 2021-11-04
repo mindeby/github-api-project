@@ -27,7 +27,7 @@ const BestRepos = () => {
                 localStorage.setItem('repositories', JSON.stringify(data.items));
                 setRepos(data.items)
             }).catch(error => console.log(error))
-      }, []);
+      }, [repos]);
 
     //update local storage everytime there is a change to the saved array
     useEffect(() => {

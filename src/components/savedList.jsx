@@ -14,7 +14,7 @@ const SavedList = ({list, saved, setSaved}) => {
         } else {
             setSorted(list)
         }
-    }, [languageFilter]);
+    }, [languageFilter,list]);
 
     const languageList = saved.reduce((sorted, repo) => {
         sorted[repo.language] = saved.filter(item =>
@@ -46,14 +46,14 @@ const SavedList = ({list, saved, setSaved}) => {
             <Filter>
                 {languageList && Object.keys(languageList).map(lang => (
                         lang !== 'null' &&
-                            <Option active={lang === languageFilter} onClick={(ev) => handleSelection(ev, lang)}>
+                            <Option key={lang} active={lang === languageFilter} onClick={(ev) => handleSelection(ev, lang)}>
                             {lang}
                         </Option>
                 ))}
             </Filter>
             <List>
                 {sorted && sorted.map((repo) => (
-                     <ListItem listItem={repo} handleFavourite={handleFavourite} saved={saved}/>
+                     <ListItem key={repo.id} listItem={repo} handleFavourite={handleFavourite} saved={saved}/>
                 ))}
                 {sorted.length < 1 && <p>
                     Like a repo, come on!
