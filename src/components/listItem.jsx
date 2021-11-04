@@ -7,7 +7,7 @@ const ListItem = ({listItem, handleFavourite, saved}) => {
       return (
             <Item key={listItem.id}>
                     <li key={listItem.id}>
-                        <a href={listItem.url} target="_blank" rel="noreferrer">
+                        <a href={listItem.html_url} target="_blank" rel="noreferrer">
                             <Name>{listItem.name}</Name>
                             <Description>{listItem.description}</Description>
                             {/* <p>{repo.language}</p> */}
@@ -37,7 +37,7 @@ const Item = styled.ul`
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding: 12px 12px 12px 6px;
+        padding: 12px 0;
         text-align: left;
         border-bottom: solid 1px #a6abb0;
 
@@ -49,12 +49,10 @@ const Item = styled.ul`
             width: 100%;
         }
         @media (min-width: 768px) {
+            width:95%;
+            margin:auto;
             &:hover {
-                background: linear-gradient(to bottom, #371765, #6e147c);
-                color: white;
-                svg {
-                    fill: white;
-                }
+                background: #fafafa;
             }
         }
     }

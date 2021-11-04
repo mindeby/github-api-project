@@ -8,6 +8,7 @@ const BestRepos = () => {
     const [saved, setSaved] = useState(JSON.parse(localStorage.getItem('saved')) || [])
     const [openTab, setOpenTab] = useState('best')
 
+    console.log(repos)
     //data fetching
     useEffect(() => {
         let now = new Date().toISOString().slice(0, 10).toString();
@@ -70,6 +71,9 @@ const Container = styled.div`
     }
     max-width: 1440px;
     margin: auto;
+    @media (min-width: 768px) {
+        padding: 16px 0 0;
+    }
 `
 
 const Tabs = styled.div`
