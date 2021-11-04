@@ -26,10 +26,10 @@ const SavedList = ({list, saved, setSaved}) => {
     const handleFavourite = (ev, repo) => {
         if (saved.filter(item => item.id === repo.id).length > 0) {
             setSaved(saved.filter(item => item.id !== repo.id))
-            ev.target.closest('svg').classList.remove('active')
+            ev.target?.closest('svg').classList.remove('active')
         } else {
             setSaved([...saved, repo])
-            ev.target.closest('svg').classList.add('active')
+            ev.target?.closest('svg').classList.add('active')
         }
     }
 
