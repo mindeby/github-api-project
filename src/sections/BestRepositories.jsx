@@ -4,9 +4,12 @@ const BestRepos = () => {
     const [repos, setRepos] = useState([])
 
     useEffect(() => {
+        let now = new Date().toISOString().slice(0, 10).toString();
+        // refetch data everyday or if there are no records saved on local storage
+        let refetch = !repos || localStorage.getItem('lastFetch') !== now;
         const creationDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10).toString();
         const limitResults = '20';
-        fetch(`https://api.github.com/search/repositories?q=created:%3E${creationDate}&sort=stars&order=desc&per_page=${limitResults}`, {
+        refetch && fetch(`https://api.github.com/search/repositories?q=created:%3E${creationDate}&sort=stars&order=desc&per_page=${limitResults}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -14,12 +17,11 @@ const BestRepos = () => {
           })
             .then(res => res.json())
             .then(( data ) => {
+                localStorage.setItem('lastFetch', now);
                 localStorage.setItem('repositories', JSON.stringify(data.items));
                 setRepos(data.items)
             }).catch(error => console.log(error))
       }, []);
-
-      console.log(repos)
 
       return (
        <div>
