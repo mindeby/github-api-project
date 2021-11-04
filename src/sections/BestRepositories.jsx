@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components'
+import Icon from '../components/icon'
 
 const BestRepos = () => {
-    const [repos, setRepos] = useState([])
+    const [repos, setRepos] = useState(null)
+    const [saved, setSaved] = useState([])
 
+    //data fetching
     useEffect(() => {
         let now = new Date().toISOString().slice(0, 10).toString();
         // refetch data everyday or if there are no records saved on local storage
@@ -23,12 +27,55 @@ const BestRepos = () => {
             }).catch(error => console.log(error))
       }, []);
 
-      return (
-       <div>
+    const handleFavourite = (ev, repo) => {
+        if (saved.filter(item => item.id === repo.id).length > 0) {
+            setSaved(saved.filter(item => item.id !== repo.id))
+            ev.target.closest('svg').classList.remove('active')
+        } else {
+            setSaved([...saved, repo])
+            ev.target.closest('svg').classList.add('active')
+        }
+    }
 
-       </div>
-    );
+      return (
+       <Container>
+            <ul>
+                {repos && repos.map((repo) => (
+                    <li key={repo.id}>
+                        <a href={repo.url} target="_blank" rel="noreferrer">
+                            <p>{repo.name}</p>
+                            <p>{repo.description}</p>
+                            <p>{repo.language}</p>
+                            <p>{repo.stargazers_count}</p>
+                        </a>
+                        <HeartWrapper onClick={(ev) => handleFavourite(ev, repo)}>
+                            <Icon type='heart' />
+                        </HeartWrapper>
+                    </li>
+                ))}
+           </ul>
+       </Container>
+        );
 }
 
 export default BestRepos
 
+const Container = styled.div`
+    li {
+        position: relative;
+    }
+`
+
+
+const HeartWrapper = styled.div`
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    cursor: pointer;
+
+    svg.active {
+        path {
+            fill: red;
+        }
+    }
+`
