@@ -8,7 +8,6 @@ const BestRepos = () => {
     const [saved, setSaved] = useState(JSON.parse(localStorage.getItem('saved')) || [])
     const [openTab, setOpenTab] = useState('best')
 
-    console.log(repos)
     //data fetching
     useEffect(() => {
         let now = new Date().toISOString().slice(0, 10).toString();

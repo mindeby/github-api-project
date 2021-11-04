@@ -91,7 +91,9 @@ const HeartWrapper = styled.div`
     margin: 0 12px;
 
     svg {
+        opacity: 30%;
         &.active {
+            opacity: 100%;
             path {
                 fill: red;
             }
