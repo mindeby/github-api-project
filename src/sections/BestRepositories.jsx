@@ -4,7 +4,7 @@ import Icon from '../components/icon'
 
 const BestRepos = () => {
     const [repos, setRepos] = useState(null)
-    const [saved, setSaved] = useState([])
+    const [saved, setSaved] = useState(JSON.parse(localStorage.getItem('saved')) || [])
 
     //data fetching
     useEffect(() => {
@@ -26,6 +26,11 @@ const BestRepos = () => {
                 setRepos(data.items)
             }).catch(error => console.log(error))
       }, []);
+
+    //update local storage everytime there is a change to the saved array
+    useEffect(() => {
+        localStorage.setItem('saved', JSON.stringify(saved));
+    }, [saved]);
 
     const handleFavourite = (ev, repo) => {
         if (saved.filter(item => item.id === repo.id).length > 0) {
@@ -49,7 +54,7 @@ const BestRepos = () => {
                             <p>{repo.stargazers_count}</p>
                         </a>
                         <HeartWrapper onClick={(ev) => handleFavourite(ev, repo)}>
-                            <Icon type='heart' />
+                            <Icon type='heart' className={saved.filter(item => item.id === repo.id).length > 0 ?  'active' : undefined}/>
                         </HeartWrapper>
                     </li>
                 ))}
